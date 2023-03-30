@@ -71,8 +71,8 @@ done
 
 for h in ${hemi[@]}; do
 	mris_apply_reg \
-	--src ${surf_analysis_path}/fALFF/wholeBrain/${s}/${s}_fALFF_${h}.mgz \
-	--o ${surf_analysis_path}/fALFF/surface/wholeBrain/${s}/${s}_fALFF_${h}_fsavg.mgz \
+	--src ${surf_analysis_path}/fALFF/wholeBrain/${s}/${s}_fALFF_${h}_fs.mgz \
+	--o ${surf_analysis_path}/fALFF/wholeBrain/${s}/${s}_fALFF_${h}_fsavg.mgz \
 	--streg $SUBJECTS_DIR/${s}/surf/${h}.fsaverage.sphere.reg $SUBJECTS_DIR/fsaverage/surf/${h}.sphere.reg
 done
 # Checkpoint for mris_apply_reg for fALFF whole brain

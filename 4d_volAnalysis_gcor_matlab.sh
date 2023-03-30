@@ -36,10 +36,15 @@ for s in ${subj[@]}; do
 	## Remove temporary files
 		rm ${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_mean.nii.gz ${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_std.nii.gz
 
-	matlab -batch "cd('/Volumes/gdrive4tb/IGNITE/code/resting-state'); calc_gcor('${M}', '${N}','${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_demeaned.nii.gz', '${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_GCORmap.nii')" -nojvm
+	gunzip ${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_demeaned.nii.gz /Volumes/gdrive4tb/IGNITE/resting-state/preprocessed/${s}/meanFunc/bet/${s}_mean_func_bet_mask.nii.gz /Volumes/gdrive4tb/IGNITE/mask/segmentation/${s}/func_segment_masks/gm/${s}_func_gm_mask_bin.nii.gz
 
-	gzip ${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_GCORmap.nii
+	matlab -batch "cd('/Volumes/gdrive4tb/IGNITE/code/resting-state'); calc_gcor('${M}', '${N}','${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_demeaned.nii', '/Volumes/gdrive4tb/IGNITE/resting-state/preprocessed/${s}/meanFunc/bet/${s}_mean_func_bet_mask.nii', '${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_GCORmap.nii')" -nojvm
 
+	matlab -batch "cd('/Volumes/gdrive4tb/IGNITE/code/resting-state'); calc_gcor_gm('${M}', '${N}','${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_demeaned.nii', '/Volumes/gdrive4tb/IGNITE/mask/segmentation/${s}/func_segment_masks/gm/${s}_func_gm_mask_bin.nii', '${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_GCORmap_GM.nii')" -nojvm
+
+	gzip ${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_GCORmap.nii ${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_GCORmap_GM.nii 
+
+	gzip ${gcor_path}/wholeBrain/${s}/${s}_wholeBrain_demeaned.nii /Volumes/gdrive4tb/IGNITE/resting-state/preprocessed/${s}/meanFunc/bet/${s}_mean_func_bet_mask.nii /Volumes/gdrive4tb/IGNITE/mask/segmentation/${s}/func_segment_masks/gm/${s}_func_gm_mask_bin.nii
 
 	# Checkpoint for taking ALFF of mean time series
 	echo "${s} GCOR from the whole brain has been performed in matlab" >> ${log_path}/4d_volAnalysis_gcor_matlab_LOG.txt
